@@ -5,3 +5,4 @@ Ejemplos básicos de programación concurrente:
  lo necesita un distinto consumidor, los cuales los consumen al ser expedidos. Por tanto, se trata de un programa
  con 4 hebras y 4 semáforos que controlan su ejecución. Contando la nueva función que muestra estadísticas, se
  trataría de 5 hebras y 4 semáforos
+ - **fumadores-con-monitores.java** es el mismo problema que el anterior, pero en este caso resuelto usando monitores en Java, utilizando una implementación estilo *Hoare*.
