@@ -1,6 +1,8 @@
 /*****************************************************************************/
-// Fumadores con monitores Java (estilo Hoare)
-// Por David Vargas - http://github.com/dvcarrillo
+// Sistemas Concurrentes y Distribuidos
+// Práctica 2: Problema de los fumadores
+// 
+// Por David Vargas Carrillo, noviembre de 2015
 /*****************************************************************************/
 
 import monitor.*;
@@ -44,7 +46,7 @@ class Estanco extends AbstractMonitor
 
 			// Se informa de qué fumador ha fumado el ingrediente
 
-			System.out.println ("Fumador " + miIngrediente + " ha consumido un cigarro.");
+			System.out.println ("Fumador " + (miIngrediente + 1) + " ha consumido un cigarro.");
 
 			// Se pone a nulo el ingrediente en el mostrador
 			ingrediente_mostrador = -1;
@@ -60,7 +62,16 @@ class Estanco extends AbstractMonitor
 		enter();
 
 			ingrediente_mostrador = ingrediente;
-			System.out.println ("Ingrediente despachado: " + ingrediente_mostrador);
+
+			switch (ingrediente_mostrador)
+			{
+				case 0: System.out.println ("Despachando cerillas...");
+						break;
+				case 1: System.out.println ("Despachando tabaco...");
+						break;
+				case 2: System.out.println ("Despachando papel...");
+			}
+
 			puede_consumir[ingrediente].signal ();
 
 		leave();
@@ -93,7 +104,7 @@ class Fumador implements Runnable
 		miIngrediente = p_miIngrediente;
 		estanco = un_estanco;
 		thr = new Thread (this);
-		System.out.println ("Fumador " + miIngrediente + " creado.");
+		System.out.println ("Fumador " + (miIngrediente + 1)  + " creado.");
 	}
 
 	public void run ()
@@ -183,6 +194,6 @@ class MainFumadores
 		for(int i=0; i < 3; i++)
 		{
         	fumadores[i].thr.start();
-    	}
+        }
 	}
 }
