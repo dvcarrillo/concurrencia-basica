@@ -31,10 +31,10 @@ void productor()
 
 		// espera bloqueado durante un intervalo de tiempo aleatorio 
 		// (entre una décima de segundo y un segundo)
-		usleep( 1000U * (100U+(rand()%900U)) );
+		usleep (1000U * (100U+(rand()%900U)));
 
 		// enviar 'value'
-		MPI_Ssend( &value, 1, MPI_INT, Buffer, 1, MPI_COMM_WORLD );
+		MPI_Ssend (&value, 1, MPI_INT, Buffer, 1, MPI_COMM_WORLD);
 	}
 }
 // ---------------------------------------------------------------------
@@ -47,7 +47,7 @@ void buffer()
               rama ;
    MPI_Status status ;
    
-   for( unsigned int i=0 ; i < ITERS*2 ; i++ )
+   for (unsigned int i=0 ; i < ITERS*2 ; i++)
    {  
       int num;
 
@@ -118,7 +118,7 @@ void consumidor()
       
       // espera bloqueado durante un intervalo de tiempo aleatorio 
       // (entre una décima de segundo y un segundo)
-      usleep( 1000U * (100U+(rand()%900U)) );
+      usleep (1000U * (100U+(rand()%900U)));
       
       raiz = sqrt(value) ;
    }
