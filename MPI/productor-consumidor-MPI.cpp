@@ -1,6 +1,6 @@
 /*****************************************************************************/
 // Prácticas de Sistemas Concurrentes y Distribuidos
-// Por David Vargas Carrillo, 2015
+// Por David Vargas Carrillo, 2016
 /*****************************************************************************/
 
 #include <mpi.h>
