@@ -1,3 +1,8 @@
+/*****************************************************************************/
+// Prácticas de Sistemas Concurrentes y Distribuidos
+// Por David Vargas Carrillo, 2015
+/*****************************************************************************/
+
 #include <iostream>
 #include <cassert>
 #include <pthread.h>
