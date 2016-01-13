@@ -1,8 +1,6 @@
 /*****************************************************************************/
-// Sistemas Concurrentes y Distribuidos
-// Práctica 2: Problema de los fumadores
-// 
-// Por David Vargas Carrillo, noviembre de 2015
+// Prácticas de Sistemas Concurrentes y Distribuidos
+// Por David Vargas Carrillo, 2015
 /*****************************************************************************/
 
 import monitor.*;
