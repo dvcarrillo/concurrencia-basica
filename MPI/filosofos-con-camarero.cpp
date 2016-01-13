@@ -1,3 +1,8 @@
+/*****************************************************************************/
+// Prácticas de Sistemas Concurrentes y Distribuidos
+// Por David Vargas Carrillo, 2016
+/*****************************************************************************/
+
 #include <iostream>
 #include <time.h>      // incluye "time"
 #include <unistd.h>    // incluye "usleep"
