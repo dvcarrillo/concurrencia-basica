@@ -37,11 +37,11 @@ int main (int argc, char* argv[])
    }
 
    if (rank == CAMARERO)
-    Camarero(rank, size);
+      Camarero(rank, size - 1);
    else if ((rank % 2) == 0)
-      Filosofo(rank, size);    // Los pares son Filosofos
+      Filosofo(rank, size - 1);    // Los pares son Filosofos
    else
-      Tenedor(rank, size);     // Los impares son Tenedores
+      Tenedor(rank, size - 1);     // Los impares son Tenedores
 
    MPI_Finalize();
    return 0;
@@ -60,6 +60,13 @@ void Filosofo (int id, int nprocesos)
 
    while (true)
    {
+      // Piensa (espera bloqueada aleatorio del proceso)
+      cout << "Filosofo " << id << " PENSANDO..." << endl << flush;
+
+      // espera bloqueado durante un intervalo de tiempo aleatorio
+      // (entre una décima de segundo y un segundo)
+      usleep (1000U * (100U + (rand() % 900U)));
+
       // Pide permiso y espera a que el camarero le llame para sentarse (tag 1)
       MPI_Ssend(&peticion, 1, MPI_INT, CAMARERO, 1, MPI_COMM_WORLD);
       cout << "Filosofo " << id << " se sienta" << endl << flush;
@@ -84,13 +91,6 @@ void Filosofo (int id, int nprocesos)
       // Suelta el tenedor derecho
       cout << "Filosofo " << id << " suelta tenedor derecho " << der << endl << flush;
       MPI_Ssend(&depositar, 1, MPI_INT, der, 0, MPI_COMM_WORLD);
-
-      // Piensa (espera bloqueada aleatorio del proceso)
-      cout << "Filosofo " << id << " PENSANDO..." << endl << flush;
-
-      // espera bloqueado durante un intervalo de tiempo aleatorio
-      // (entre una décima de segundo y un segundo)
-      usleep (1000U * (100U + (rand() % 900U)));
 
       // Pide permiso para levantarse y espera a que el camarero lo permita (tag 2)
       MPI_Ssend(&peticion, 1, MPI_INT, CAMARERO, 2, MPI_COMM_WORLD);
@@ -128,27 +128,32 @@ void Camarero (int id, int nprocesos)
 {
   MPI_Status status;
 
-  int Filo;
+  int Filo, tag;
   int buf;
   int num_sentados = 0;
 
   while (true)
   {
-    // Si ya hay 4 filosofos sentados, esperar a que alguno se levante
-    if (num_sentados == 4) 
-    {
-      MPI_Recv(&buf, 1, MPI_INT, MPI_ANY_SOURCE, 2, MPI_COMM_WORLD, &status);
-      Filo = status.MPI_SOURCE;
-      cout << "Camarero recibe la peticion de levantarse del filosofo " << Filo << endl << flush;
-      num_sentados--;
-    }
+    if (num_sentados < 4)
+      MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+    else
+      MPI_Probe(MPI_ANY_SOURCE, 2, MPI_COMM_WORLD, &status);
 
-    else 
+    Filo = status.MPI_SOURCE;
+    tag = status.MPI_TAG;
+
+    if (tag == 1)         // sentarse
     {
-      MPI_Recv(&buf, 1, MPI_INT, MPI_ANY_SOURCE, 1, MPI_COMM_WORLD, &status);
-      Filo = status.MPI_SOURCE;
+      MPI_Recv(&buf, 1, MPI_INT, Filo, tag, MPI_COMM_WORLD, &status);
       cout << "Camarero recibe la peticion de sentarse del filosofo " << Filo << endl << flush;
       num_sentados++;
+    }
+
+    else if (tag == 2)    // levantarse
+    {
+      MPI_Recv(&buf, 1, MPI_INT, Filo, tag, MPI_COMM_WORLD, &status);
+      cout << "Camarero recibe la peticion de levantarse del filosofo " << Filo << endl << flush;
+      num_sentados--;
     }
   }
 }
