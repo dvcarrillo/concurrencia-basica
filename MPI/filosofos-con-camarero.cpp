@@ -134,8 +134,6 @@ void Camarero (int id, int nprocesos)
 
   while (true)
   {
-    MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-
     // Si ya hay 4 filosofos sentados, esperar a que alguno se levante
     if (num_sentados == 4) 
     {
